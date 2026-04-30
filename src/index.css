@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Sora", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-bg-deep: #F8FAFC;
+  --color-bg-card: #FFFFFF;
+  --color-accent: #7C3AED;
+  --color-accent-glow: rgba(124, 58, 237, 0.1);
+  --color-safe: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --color-glass: rgba(255, 255, 255, 0.8);
+  --color-glass-border: rgba(0, 0, 0, 0.05);
+  --color-text-muted: #64748B;
+  --color-text-dim: rgba(100, 116, 139, 0.4);
+}
+
+@keyframes pulse-security {
+  0% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.2); }
+  70% { box-shadow: 0 0 0 20px rgba(124, 58, 237, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0); }
+}
+
+.animate-pulse-security {
+  animation: pulse-security 2s infinite;
+}
+
+@layer base {
+  body {
+    @apply bg-bg-deep text-[#0F172A] font-sans antialiased selection:bg-accent/20;
+    background-image: 
+      radial-gradient(circle at 10% 10%, rgba(124, 58, 237, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 90% 90%, rgba(16, 185, 129, 0.03) 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.02) 0%, transparent 60%);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white border border-slate-200/60 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08)];
+  }
+  
+  .glass-input {
+    @apply bg-slate-50 border border-slate-200 focus:border-accent/50 focus:bg-white transition-all duration-500 outline-none;
+  }
+
+  .timeline-item {
+    @apply relative pl-12 pb-12 last:pb-0;
+  }
+
+  .timeline-dot {
+    @apply absolute left-0 top-0 w-8 h-8 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent shadow-[0_0_20px_rgba(124,58,237,0.15)] z-10;
+  }
+
+  .timeline-line {
+    @apply absolute left-4 top-8 bottom-0 w-px bg-gradient-to-b from-accent/20 to-transparent;
+  }
+
+  .stat-card-inner {
+    @apply relative overflow-hidden rounded-3xl p-6 bg-gradient-to-br from-slate-50 to-transparent border border-slate-200 hover:border-accent/20 transition-all duration-500;
+  }
+
+  .nav-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all duration-300 font-bold text-sm tracking-tight;
+  }
+
+  .nav-item-active {
+    @apply bg-accent text-white shadow-[0_10px_25px_rgba(124,58,237,0.3)] scale-[1.02];
+  }
+
+  .nav-item-inactive {
+    @apply text-slate-500 hover:text-slate-900 hover:bg-slate-100;
+  }
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #7c3aed;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7c3aed;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-15px) rotate(2deg); }
+}
+
+.animate-float {
+  animation: float 8s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}
+
+.glow-bg {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--color-accent) 0%, transparent 70%);
+  filter: blur(80px);
+  z-index: -1;
+  animation: pulse-glow 10s ease-in-out infinite;
+}
+
+/* 3D Glassmorphism Timeline Effects */
+.glass-3d {
+  transform-style: preserve-3d;
+  perspective: 1200px;
+}
+
+.glass-3d-item {
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.glass-3d-item:hover {
+  transform: translateZ(30px) rotateX(3deg) rotateY(-3deg);
+}
+
+/* Scanning Animation for Gauge */
+@keyframes scan {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-scan {
+  animation: scan 4s linear infinite;
+}

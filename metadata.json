@@ -1,0 +1,5 @@
+{
+  "name": "StudentShield AI",
+  "description": "Production-grade fraud detection platform for students. Features real-time AI recruitment audits, URL safety analysis, and screenshot-based scam detection.",
+  "requestFramePermissions": []
+}
