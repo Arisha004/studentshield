@@ -1,6 +1,6 @@
 import React from "react";
 import { ContainerScroll } from "./ui/container-scroll-animation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Shield, Zap, Lock, Eye, Globe, UserCheck, ChevronRight, CheckCircle2, ShieldAlert, Fingerprint, Activity, MousePointer2 } from "lucide-react";
 
 export const LandingPage = ({ onGetStarted }: { onGetStarted: () => void }) => {
@@ -25,6 +25,12 @@ export const LandingPage = ({ onGetStarted }: { onGetStarted: () => void }) => {
               className="text-sm font-bold text-slate-500 hover:text-purple-600 transition-colors"
             >
               Features
+            </button>
+            <button 
+              onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+              className="text-sm font-bold text-slate-500 hover:text-purple-600 transition-colors"
+            >
+              How It Works
             </button>
             <button 
               onClick={() => document.getElementById('protocol')?.scrollIntoView({ behavior: 'smooth' })}
@@ -153,6 +159,24 @@ export const LandingPage = ({ onGetStarted }: { onGetStarted: () => void }) => {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section id="how-it-works" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6 space-y-16">
+          <div className="text-center space-y-4">
+            <p className="text-xs font-black text-purple-600 uppercase tracking-widest">Platform Demo</p>
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">See StudentShield In Action</h2>
+            <p className="text-slate-500 font-medium max-w-2xl mx-auto">A visual walkthrough of our security protocol, following the forensic analysis script.</p>
+          </div>
+
+          <div className="relative group mx-auto max-w-5xl">
+            <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-3xl blur opacity-25"></div>
+            <div className="relative min-h-[500px] md:aspect-video rounded-3xl overflow-hidden bg-slate-950 shadow-2xl border-4 border-white flex items-center justify-center p-4 md:p-8">
+              <ScriptDemoPlayer />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Comparison Section */}
       <section id="protocol" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
@@ -257,32 +281,33 @@ export const LandingPage = ({ onGetStarted }: { onGetStarted: () => void }) => {
               </p>
             </div>
             
-            <div className="grid grid-cols-3 gap-12 text-center md:text-left">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 text-center md:text-left">
               <div className="space-y-4">
                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-900">Platform</p>
                 <div className="flex flex-col gap-2 text-sm font-bold text-slate-400 underline underline-offset-4 decoration-slate-100">
                   <a href="#" onClick={(e) => { e.preventDefault(); onGetStarted(); }}>Dashboard</a>
                   <a href="#features" onClick={(e) => { e.preventDefault(); document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' }); }}>Audit Engine</a>
+                  <a href="#how-it-works" onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }}>Demo Video</a>
                 </div>
               </div>
               <div className="space-y-4">
                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-900">Legal</p>
                 <div className="flex flex-col gap-2 text-sm font-bold text-slate-400 underline underline-offset-4 decoration-slate-100">
-                  <a href="#">Privacy</a>
-                  <a href="#">Terms</a>
+                  <a href="#">Privacy Policy</a>
+                  <a href="#">Terms of Use</a>
                 </div>
               </div>
               <div className="space-y-4">
                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-900">Project</p>
                 <div className="flex flex-col gap-2 text-sm font-bold text-slate-400 underline underline-offset-4 decoration-slate-100">
-                  <a href="#">Github</a>
-                  <a href="#">Devpost</a>
+                  <a target="_blank" rel="noreferrer" href="https://github.com">Source Code</a>
+                  <a target="_blank" rel="noreferrer" href="https://devpost.com">Devpost</a>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="pt-12 border-t border-slate-50 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+          <div className="pt-12 border-t border-slate-50 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
             <div className="space-y-2">
               <p className="text-[10px] font-black uppercase tracking-widest text-purple-600">Created For Hackathon</p>
               <p className="text-sm font-black text-slate-900 uppercase tracking-tighter">AI-SEEKHO 2026</p>
@@ -293,7 +318,7 @@ export const LandingPage = ({ onGetStarted }: { onGetStarted: () => void }) => {
                <p className="text-sm font-black text-slate-900 italic">ARISHA MUMTAZ</p>
             </div>
 
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+            <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">
               © 2026 StudentShield Security Protocol
             </p>
           </div>
@@ -327,16 +352,190 @@ const DetailedFeature = ({ icon: Icon, title, desc }: { icon: any, title: string
   </div>
 );
 
+const ScriptDemoPlayer = () => {
+  const [step, setStep] = React.useState(0);
+  const totalSteps = 5;
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setStep((s) => (s + 1) % totalSteps);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const scenes = [
+    {
+      title: "SCENE 1: THE THREAT",
+      caption: "A typical job scam starts with a too-good-to-be-true message.",
+      content: (
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-white rounded-3xl p-6 shadow-2xl max-w-sm border border-slate-200"
+        >
+          <div className="flex items-center gap-3 mb-4">
+             <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center font-black">?</div>
+             <div className="space-y-1">
+                <p className="text-xs font-black">Unknown Number</p>
+                <p className="text-[10px] text-slate-400">WhatsApp • 2 mins ago</p>
+             </div>
+          </div>
+          <p className="text-sm font-bold text-slate-700 italic border-l-4 border-purple-500 pl-3">
+            "Hi! I'm from StudentHR. You've been selected for a remote part-time role paying $45/hr. Please confirm your SSN and bank details to start onboarding immediately."
+          </p>
+        </motion.div>
+      )
+    },
+    {
+      title: "SCENE 2: DETECTION",
+      caption: "StudentShield intercepts the text and runs identity verification.",
+      content: (
+        <div className="relative w-full max-w-sm md:max-w-md h-64 border border-white/20 bg-slate-900 rounded-3xl overflow-hidden shadow-2xl">
+           <motion.div 
+             initial={{ top: "0%" }}
+             animate={{ top: "100%" }}
+             transition={{ duration: 2, repeat: Infinity }}
+             className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-purple-500 to-transparent z-10 shadow-[0_0_15px_rgba(168,85,247,0.5)]"
+           />
+           <div className="p-6 md:p-8 space-y-4">
+              <div className="flex items-center justify-between text-white/50 text-[10px] font-black uppercase tracking-widest">
+                 <span>Scanning Signature</span>
+                 <span>87% Analyzed</span>
+              </div>
+              <div className="space-y-2">
+                 <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                    <motion.div 
+                      initial={{ width: "0%" }}
+                      animate={{ width: "87%" }}
+                      className="h-full bg-purple-500" 
+                    />
+                 </div>
+                 <p className="font-mono text-[10px] text-purple-300">ANALYSIS: LINGUISTIC_SPOOFING_DETECTED</p>
+                 <p className="font-mono text-[10px] text-purple-300">ANALYSIS: DOMAIN_MISMATCH_HR_CHECK</p>
+              </div>
+           </div>
+        </div>
+      )
+    },
+    {
+      title: "SCENE 3: THE VERDICT",
+      caption: "Instant forensic alert blocking the transaction.",
+      content: (
+        <motion.div 
+          initial={{ rotate: -5, scale: 0.5, opacity: 0 }}
+          animate={{ rotate: 0, scale: 1, opacity: 1 }}
+          className="bg-red-600 text-white p-6 md:p-8 rounded-[32px] md:rounded-[40px] shadow-3xl text-center space-y-4 border-4 border-white/30"
+        >
+          <ShieldAlert size={48} className="md:w-16 md:h-16 mx-auto" />
+          <h4 className="text-2xl md:text-3xl font-black italic tracking-tighter uppercase">Scam Detected!</h4>
+          <p className="text-[10px] md:text-sm font-black text-red-100 uppercase tracking-widest">High Probability Social Engineering Identified</p>
+          <div className="px-4 py-2 bg-white/10 rounded-xl text-[10px] font-black">
+             ID: STUDENT-FRAUD-SIG-04
+          </div>
+        </motion.div>
+      )
+    },
+    {
+      title: "SCENE 4: FORENSIC DETAIL",
+      caption: "We don't just alert; we explain why it's a threat.",
+      content: (
+        <div className="bg-white rounded-3xl p-6 shadow-2xl max-w-lg border border-slate-200">
+           <h4 className="text-sm font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+              <Fingerprint className="text-purple-600" size={16} /> Technical Audit
+           </h4>
+           <div className="space-y-3">
+              <p className="text-xs font-bold text-slate-500">The recruiter profile associated with this message has 0 history on academic networks. The attached link redirects to a known phishing landing page in Eastern Europe.</p>
+              <div className="grid grid-cols-2 gap-3 text-[10px] font-black uppercase tracking-tighter">
+                 <div className="p-2 border rounded-lg border-red-100 bg-red-50 text-red-600">URL SPOOF: POSITIVE</div>
+                 <div className="p-2 border rounded-lg border-red-100 bg-red-50 text-red-600">ID HARVEST: TRUE</div>
+              </div>
+           </div>
+        </div>
+      )
+    },
+    {
+      title: "SCENE 5: PEACE OF MIND",
+      caption: "StudentShield is your 24/7 digital academic guardian.",
+      content: (
+        <motion.div 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="bg-gradient-to-br from-purple-600 to-indigo-600 text-white p-6 md:p-8 rounded-[32px] md:rounded-[40px] shadow-3xl flex flex-col md:flex-row items-center gap-4 md:gap-6"
+        >
+          <div className="w-16 h-16 md:w-20 md:h-20 bg-white/20 rounded-2xl flex items-center justify-center">
+            <CheckCircle2 size={32} className="md:w-10 md:h-10" />
+          </div>
+          <div className="space-y-1 text-center md:text-left">
+             <h4 className="text-xl md:text-2xl font-black tracking-tight">System Secure</h4>
+             <p className="text-xs md:text-sm font-medium text-white/70">No threats detected in past 24 hours.</p>
+             <div className="flex justify-center md:justify-start gap-1 pt-2">
+                {[1,2,3,4,5].map(i => <div key={i} className="w-6 md:w-8 h-1 bg-white/20 rounded-full" />)}
+             </div>
+          </div>
+        </motion.div>
+      )
+    }
+  ];
+
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center gap-6 md:gap-12 text-center py-8">
+      {/* Visual Component */}
+      <div className="min-h-[250px] md:min-h-[300px] w-full flex items-center justify-center px-4">
+        <AnimatePresence mode="wait">
+          <motion.div 
+            key={step}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.6, ease: "circOut" }}
+            className="w-full flex justify-center"
+          >
+            {scenes[step].content}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Caption & Controls */}
+      <div className="space-y-4 max-w-xl mx-auto px-4 z-20">
+         <motion.div 
+           key={step + "title"}
+           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+           className="space-y-2"
+         >
+           <h3 className="text-[10px] font-black text-purple-400 uppercase tracking-[0.3em] md:tracking-[0.5em]">{scenes[step].title}</h3>
+           <p className="text-base md:text-xl font-black text-white leading-tight">{scenes[step].caption}</p>
+         </motion.div>
+         
+         <div className="flex items-center justify-center gap-3">
+           {scenes.map((_, i) => (
+             <button 
+               key={i} 
+               onClick={() => setStep(i)}
+               className={`h-1.5 rounded-full transition-all duration-500 ${step === i ? "w-8 md:w-12 bg-purple-500" : "w-1.5 bg-white/20 hover:bg-white/40"}`}
+             />
+           ))}
+         </div>
+      </div>
+
+      {/* HUD Elements */}
+      <div className="absolute top-4 left-4 md:top-8 md:left-8 flex items-center gap-2 md:gap-3 pointer-events-none opacity-40">
+         <div className="w-2 h-2 md:w-3 md:h-3 bg-red-500 rounded-full animate-pulse" />
+         <span className="text-[8px] md:text-[10px] font-black text-white uppercase tracking-widest">LIVE SCRIPT REPLAY</span>
+      </div>
+    </div>
+  );
+};
+
 const ComparisonItem = ({ bad, good }: { bad: string; good: string }) => (
-  <div className="flex items-center gap-4">
-    <div className="p-2 bg-red-100 text-red-500 rounded-lg">
+  <div className="flex items-center gap-3 md:gap-4">
+    <div className="shrink-0 p-2 bg-red-100 text-red-500 rounded-lg">
       <ShieldAlert size={16} />
     </div>
-    <span className="text-sm font-bold text-slate-400">{bad}</span>
-    <ChevronRight size={16} className="text-slate-200" />
-    <div className="p-2 bg-green-100 text-green-500 rounded-lg">
+    <span className="text-[11px] md:text-sm font-bold text-slate-400 truncate">{bad}</span>
+    <ChevronRight size={14} className="text-slate-200 shrink-0" />
+    <div className="shrink-0 p-2 bg-green-100 text-green-500 rounded-lg">
       <CheckCircle2 size={16} />
     </div>
-    <span className="text-sm font-bold text-slate-900">{good}</span>
+    <span className="text-[11px] md:text-sm font-bold text-slate-900 truncate">{good}</span>
   </div>
 );
