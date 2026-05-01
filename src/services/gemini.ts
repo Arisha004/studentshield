@@ -72,9 +72,7 @@ export const geminiService = {
     try {
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
-        contents: [
-          { text: `TECHNICAL AUDIT: Analyze the following URL for phishing, brand impersonation, and technical manipulation: "${url}".` }
-        ],
+        contents: `TECHNICAL AUDIT: Analyze the following URL for phishing, brand impersonation, and technical manipulation: "${url}".`,
         config: {
           responseMimeType: "application/json",
           responseSchema: {
@@ -99,7 +97,6 @@ export const geminiService = {
           }
         }
       });
-
       return JSON.parse(response.text || '{}');
     } catch (error) {
       console.error("Gemini AnalyzeURL Error:", error);
@@ -114,9 +111,7 @@ export const geminiService = {
     try {
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
-        contents: [
-          { text: `IDENTITY AUDIT: Evaluate the legitimacy of this recruiter or company profile. Look for professional credibility markers or fraud signals: "${nameOrBio}".` }
-        ],
+        contents: `IDENTITY AUDIT: Evaluate the legitimacy of this recruiter or company profile. Look for professional credibility markers or fraud signals: "${nameOrBio}".`,
         config: {
           responseMimeType: "application/json",
           responseSchema: {
@@ -143,7 +138,6 @@ export const geminiService = {
           }
         }
       });
-
       return JSON.parse(response.text || '{}');
     } catch (error) {
       console.error("Gemini AnalyzeRecruiter Error:", error);

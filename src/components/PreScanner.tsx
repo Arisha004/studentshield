@@ -120,7 +120,7 @@ export const PreScanner = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass-card p-8 border-slate-200/60 bg-white space-y-6"
+            className="glass-card p-6 md:p-8 border-slate-200/60 bg-white space-y-6"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">

@@ -51,7 +51,7 @@ export const RecruiterCredibility = ({ initialQuery = '' }: { initialQuery?: str
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="glass-card p-10 border-slate-200 bg-white/50 relative overflow-hidden">
+      <div className="glass-card p-6 md:p-10 border-slate-200 bg-white/50 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full -mr-32 -mt-32 blur-3xl" />
         
         <div className="relative z-10 space-y-6">
@@ -73,7 +73,7 @@ export const RecruiterCredibility = ({ initialQuery = '' }: { initialQuery?: str
               className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-slate-900 font-medium focus:outline-none focus:border-accent/40 placeholder:text-slate-300 transition-all shadow-sm"
             />
             <button 
-              onClick={performCheck}
+              onClick={() => performCheck()}
               disabled={isScanning || !profileUrl.trim()}
               className="px-10 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-2xl font-black uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-purple-500/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
             >
@@ -83,6 +83,19 @@ export const RecruiterCredibility = ({ initialQuery = '' }: { initialQuery?: str
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {error && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-4 bg-danger/10 border border-danger/20 rounded-2xl text-danger text-sm font-bold flex items-center gap-3"
+          >
+            <ShieldAlert size={20} />
+            {error}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {result && (

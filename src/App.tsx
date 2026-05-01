@@ -53,6 +53,7 @@ import { VulnerabilityQuiz } from './components/VulnerabilityQuiz';
 import { StatsDashboard } from './components/StatsDashboard';
 import { RecruiterCredibility } from './components/RecruiterCredibility';
 import { BreachWatch } from './components/BreachWatch';
+import { LandingPage } from './components/LandingPage';
 
 // --- Types ---
 
@@ -638,7 +639,7 @@ const SidebarItem = ({ icon: Icon, label, active = false, onClick }: NavItemProp
 );
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState('landing');
   const [activeSubTab, setActiveSubTab] = useState('scanner');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -874,29 +875,34 @@ export default function App() {
   return (
     <div className="min-h-screen flex bg-bg-deep overflow-x-hidden relative text-slate-900">
       {/* Notifications Portal */}
-      <div className="fixed bottom-10 right-10 z-[100] pointer-events-none space-y-4">
+      <div className="fixed top-4 right-4 z-[100] pointer-events-none flex flex-col items-end gap-3 max-w-[calc(100%-32px)] md:max-w-md">
         <AnimatePresence>
-          {showNotification && (
+          {showNotification && notifications.slice(0, 3).map((n, idx) => (
             <motion.div 
+              key={n.id}
               initial={{ opacity: 0, x: 50, scale: 0.9 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: 50, scale: 0.9 }}
-              className="pointer-events-auto glass-card p-6 border-accent/30 bg-white/90 backdrop-blur-2xl shadow-2xl flex items-center gap-6 min-w-[350px]"
+              transition={{ delay: idx * 0.1 }}
+              className="pointer-events-auto glass-card p-4 md:p-5 border-accent/20 bg-white shadow-xl flex items-center gap-4 w-full"
             >
-              <div className="w-12 h-12 bg-accent/10 text-accent rounded-2xl flex items-center justify-center">
-                <Bell size={24} className="animate-ring" />
+              <div className="w-10 h-10 bg-accent/10 text-accent rounded-xl flex items-center justify-center shrink-0">
+                <Zap size={18} className="animate-pulse" />
               </div>
               <div className="flex-1">
-                <p className="text-[10px] font-black uppercase tracking-widest text-accent mb-1">System Intelligence</p>
-                <p className="text-sm font-bold text-slate-900 leading-tight">
-                  {notifications[0]?.text || "Security systems operational."}
+                <p className="text-[9px] font-black uppercase tracking-widest text-accent mb-1">Security Intelligence</p>
+                <p className="text-xs md:text-sm font-bold text-slate-900 leading-tight">
+                  {n.text}
                 </p>
               </div>
-              <button onClick={() => setShowNotification(false)} className="text-slate-300 hover:text-slate-900">
-                <X size={18} />
+              <button 
+                onClick={() => setShowNotification(false)} 
+                className="text-slate-300 hover:text-slate-900 shrink-0"
+              >
+                <X size={16} />
               </button>
             </motion.div>
-          )}
+          ))}
         </AnimatePresence>
       </div>
 
@@ -908,13 +914,17 @@ export default function App() {
       </div>
 
       {/* Sidebar - Desktop Only */}
-      <aside className="hidden lg:flex flex-col w-72 border-r border-slate-200/60 p-8 space-y-8 fixed top-0 left-0 h-screen bg-white/80 backdrop-blur-xl z-50 overflow-y-auto custom-scrollbar shadow-sm">
-        <div className="flex items-center gap-3 px-2 shrink-0">
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/20 animate-float">
+      {activeTab !== 'landing' && (
+        <aside className="hidden lg:flex flex-col w-72 border-r border-slate-200/60 p-8 space-y-8 fixed top-0 left-0 h-screen bg-white/80 backdrop-blur-xl z-50 overflow-y-auto custom-scrollbar shadow-sm">
+        <div 
+          onClick={() => setActiveTab('landing')}
+          className="flex items-center gap-3 px-2 shrink-0 cursor-pointer group"
+        >
+          <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/20 animate-float transition-transform group-hover:scale-105">
             <Shield className="text-white" size={26} />
           </div>
           <div>
-            <h1 className="text-xl font-black tracking-tighter text-slate-900 leading-none">StudentShield</h1>
+            <h1 className="text-xl font-black tracking-tighter text-slate-900 leading-none group-hover:text-purple-600 transition-colors">StudentShield</h1>
             <p className="text-[10px] font-bold text-purple-600 uppercase tracking-widest mt-1">Elite Protection</p>
           </div>
         </div>
@@ -937,6 +947,7 @@ export default function App() {
           <SidebarItem icon={HelpCircle} label="Support" active={activeTab === 'support'} onClick={() => setActiveTab('support')} />
         </div>
       </aside>
+      )}
 
       {/* Main Content */}
       {/* Mobile Navigation Menu */}
@@ -950,7 +961,10 @@ export default function App() {
           >
             <div className="p-6 flex flex-col h-full">
               <div className="flex items-center justify-between mb-10">
-                <div className="flex items-center gap-3">
+                <div 
+                  onClick={() => { setActiveTab('landing'); setIsSidebarOpen(false); }}
+                  className="flex items-center gap-3 cursor-pointer"
+                >
                   <div className="w-10 h-10 bg-purple-600 rounded-xl flex items-center justify-center text-white">
                     <Shield size={24} />
                   </div>
@@ -975,10 +989,14 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <div className="flex-1 flex flex-col min-w-0 lg:ml-72">
+      <div className={`flex-1 flex flex-col min-w-0 ${activeTab !== 'landing' ? 'lg:ml-72' : ''}`}>
         {/* Mobile Header */}
-        <header className="lg:hidden p-4 border-b border-slate-200/60 flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-md z-50 shadow-sm">
-          <div className="flex items-center gap-3 text-slate-900">
+        {activeTab !== 'landing' && (
+          <header className="lg:hidden p-4 border-b border-slate-200/60 flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-md z-50 shadow-sm">
+          <div 
+            onClick={() => setActiveTab('landing')}
+            className="flex items-center gap-3 text-slate-900 cursor-pointer"
+          >
             <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
               <Shield className="text-white" size={20} />
             </div>
@@ -997,8 +1015,10 @@ export default function App() {
             </button>
           </div>
         </header>
+        )}
 
         {/* Desktop Header */}
+        {activeTab !== 'landing' && (
         <header className="hidden lg:flex p-10 border-b border-slate-200/60 items-center justify-between sticky top-0 bg-white/80 backdrop-blur-xl z-[40]">
           <div className="flex items-center gap-4 text-slate-900">
             <h1 className="text-2xl font-black tracking-tight uppercase">{activeTab.replace('-', ' ')}</h1>
@@ -1060,8 +1080,13 @@ export default function App() {
             </div>
           </div>
         </header>
+        )}
 
-        <main className="flex-1 max-w-7xl w-full mx-auto p-6 md:p-10 space-y-16">
+        <main className={`flex-1 w-full mx-auto ${activeTab === 'landing' ? '' : 'max-w-7xl p-4 md:p-10 space-y-8 md:space-y-16'}`}>
+          {activeTab === 'landing' && (
+            <LandingPage onGetStarted={() => setActiveTab('dashboard')} />
+          )}
+
           {activeTab === 'stats' && (
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -1069,7 +1094,7 @@ export default function App() {
               className="space-y-12"
             >
               <div className="space-y-2 border-b border-slate-200 pb-8">
-                <h2 className="text-5xl font-black tracking-tight text-slate-900">Stats dashboard</h2>
+                <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900">Stats dashboard</h2>
                 <p className="text-slate-400 font-medium">Real-time visualization of your security performance and threat history.</p>
               </div>
               <StatsDashboard history={history} />
@@ -1083,7 +1108,7 @@ export default function App() {
               className="space-y-12"
             >
               <div className="space-y-2 border-b border-slate-200 pb-8">
-                <h2 className="text-5xl font-black tracking-tight text-slate-900">Pre-Scanner</h2>
+                <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900">Pre-Scanner</h2>
                 <p className="text-slate-400 font-medium">Instant local heuristic analysis for common fraud patterns.</p>
               </div>
               <PreScanner />
@@ -1097,7 +1122,7 @@ export default function App() {
               className="space-y-12"
             >
               <div className="space-y-2 border-b border-slate-200 pb-8">
-                <h2 className="text-5xl font-black tracking-tight text-slate-900">URL Safety</h2>
+                <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900">URL Safety</h2>
                 <p className="text-slate-400 font-medium">Audit links for suspicious redirects, typosquatting, and technical markers.</p>
               </div>
               <URLChecker />
@@ -1111,7 +1136,7 @@ export default function App() {
               className="space-y-12"
             >
               <div className="space-y-2 border-b border-slate-200 pb-8">
-                <h2 className="text-5xl font-black tracking-tight text-slate-900">Report Wall</h2>
+                <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900">Report Wall</h2>
                 <p className="text-slate-400 font-medium">Browse and contribute to the anonymous community threat intelligence feed.</p>
               </div>
               <ReportWall />
@@ -1125,7 +1150,7 @@ export default function App() {
               className="space-y-12"
             >
               <div className="space-y-2 border-b border-slate-200 pb-8">
-                <h2 className="text-5xl font-black tracking-tight text-slate-900">Vulnerability Audit</h2>
+                <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900">Vulnerability Audit</h2>
                 <p className="text-slate-400 font-medium">Assess your personal risk profile through an interactive security habit audit.</p>
               </div>
               <VulnerabilityQuiz />
@@ -1513,7 +1538,7 @@ export default function App() {
               {/* The Security Protocol - 3D Glassmorphism Timeline */}
               <section className="pt-24 space-y-16">
                 <div className="text-center space-y-4">
-                  <h2 className="text-5xl font-black tracking-tight text-slate-900">The Security Protocol</h2>
+                  <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900">The Security Protocol</h2>
                   <p className="text-slate-500 text-xl max-w-2xl mx-auto font-medium">Our multi-layered analysis ensures student safety through advanced linguistic modeling and threat intelligence.</p>
                 </div>
                 
@@ -1556,7 +1581,7 @@ export default function App() {
               className="space-y-12"
             >
               <div className="space-y-2 border-b border-slate-200 pb-8 text-center md:text-left">
-                <h2 className="text-5xl font-black tracking-tight text-slate-900">BreachWatch Intelligence</h2>
+                <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900">BreachWatch Intelligence</h2>
                 <p className="text-slate-500 font-medium italic">High-fidelity dark web monitoring and identity exposure analysis.</p>
               </div>
               <BreachWatch />
@@ -1570,7 +1595,7 @@ export default function App() {
               className="space-y-12"
             >
               <div className="space-y-2 border-b border-slate-200 pb-8 text-center md:text-left">
-                <h2 className="text-5xl font-black tracking-tight text-slate-900">Recruiter Auditor</h2>
+                <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900">Recruiter Auditor</h2>
                 <p className="text-slate-500 font-medium italic">Advanced verification protocol for digital recruiter profiles.</p>
               </div>
               <RecruiterCredibility />
@@ -1585,7 +1610,7 @@ export default function App() {
             >
               <div className="flex items-center justify-between border-b border-slate-200 pb-8">
                 <div className="space-y-2">
-                  <h2 className="text-5xl font-black tracking-tight text-slate-900">Scam Academy</h2>
+                  <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900">Scam Academy</h2>
                   <p className="text-slate-500 font-medium">Master the art of scam detection through interactive security drills.</p>
                 </div>
                 <div className="px-6 py-3 bg-accent/10 rounded-2xl border border-accent/20">
@@ -1660,7 +1685,7 @@ export default function App() {
             >
               <div className="flex items-center justify-between border-b border-slate-200 pb-8">
                 <div className="space-y-2">
-                  <h2 className="text-5xl font-black tracking-tight text-slate-900">Scan History</h2>
+                  <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900">Scan History</h2>
                   <p className="text-slate-500 font-medium">Review your previous security assessments and threat reports.</p>
                 </div>
                 <button className="px-6 py-3 bg-slate-100 hover:bg-slate-200 rounded-2xl text-xs font-black uppercase tracking-widest transition-all border border-slate-200 text-slate-900">Clear All Records</button>
@@ -1708,7 +1733,7 @@ export default function App() {
             >
               <div className="flex items-center justify-between border-b border-slate-200 pb-8">
                 <div className="space-y-2">
-                  <h2 className="text-5xl font-black tracking-tight text-slate-900">Safe List Protocol</h2>
+                  <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900">Safe List Protocol</h2>
                   <p className="text-slate-500 font-medium">Verified entities that bypass standard scanning protocols.</p>
                 </div>
                 <button 
@@ -1763,7 +1788,7 @@ export default function App() {
             >
               <div className="glass-card p-12 space-y-10 border-slate-200">
                 <div className="space-y-3">
-                  <h2 className="text-5xl font-black tracking-tight text-slate-900">Report a Scam</h2>
+                  <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900">Report a Scam</h2>
                   <p className="text-slate-500 text-xl font-medium">Help protect the student community by reporting new scam patterns and deceptive entities.</p>
                 </div>
                 <div className="grid gap-8">
@@ -1804,7 +1829,7 @@ export default function App() {
               className="space-y-12"
             >
               <div className="space-y-2 border-b border-slate-200 pb-8">
-                <h2 className="text-5xl font-black tracking-tight text-slate-900">Settings</h2>
+                <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900">Settings</h2>
                 <p className="text-slate-500 font-medium">Configure your security preferences and account protocols.</p>
               </div>
               <div className="grid gap-8">
@@ -1842,7 +1867,7 @@ export default function App() {
               className="space-y-12"
             >
               <div className="space-y-2 border-b border-slate-200 pb-8">
-                <h2 className="text-5xl font-black tracking-tight text-slate-900">Support Center</h2>
+                <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900">Support Center</h2>
                 <p className="text-slate-500 font-medium">Get help with security protocols and system features.</p>
               </div>
 
@@ -1921,31 +1946,6 @@ export default function App() {
             </motion.div>
           )}
         </main>
-
-        {/* Notification Toast */}
-        <AnimatePresence>
-          {showNotification && (
-            <motion.div 
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 100 }}
-              className="fixed bottom-10 right-10 z-[100] max-w-sm w-full"
-            >
-              <div className="glass-card p-6 bg-white border-accent/20 shadow-[0_20px_60px_rgba(124,58,237,0.15)] flex items-center gap-4">
-                <div className="w-12 h-12 bg-accent rounded-2xl flex items-center justify-center shrink-0">
-                  <Zap size={24} className="text-white animate-pulse" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-xs font-black uppercase tracking-widest text-accent mb-1">Live Security Alert</p>
-                  <p className="text-sm font-bold text-slate-900">New "Part-time Tutor" scam detected in your area.</p>
-                </div>
-                <button onClick={() => setShowNotification(false)} className="p-2 text-slate-300 hover:text-slate-900">
-                  <X size={18} />
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* Footer */}
         <footer className="p-12 border-t border-slate-200 bg-slate-50/50">

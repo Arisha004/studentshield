@@ -108,7 +108,7 @@ export const URLChecker = () => {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="glass-card p-8 border-slate-200/60 bg-white space-y-6"
+            className="glass-card p-6 md:p-8 border-slate-200/60 bg-white space-y-6"
           >
             <div className={`p-4 rounded-2xl flex items-center gap-4 ${allPassed ? 'bg-green-500/10 border border-green-500/20' : 'bg-red-500/10 border border-red-500/20'}`}>
               <div className={allPassed ? 'text-green-500' : 'text-red-500'}>

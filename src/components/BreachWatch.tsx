@@ -39,7 +39,7 @@ export const BreachWatch = () => {
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="glass-card p-10 border-slate-200 bg-white/50 relative overflow-hidden text-center max-w-3xl mx-auto">
+      <div className="glass-card p-6 md:p-10 border-slate-200 bg-white/50 relative overflow-hidden text-center max-w-3xl mx-auto">
         <div className="absolute top-0 left-0 w-64 h-64 bg-danger/5 rounded-full -ml-32 -mt-32 blur-3xl" />
         
         <div className="relative z-10 space-y-8">
