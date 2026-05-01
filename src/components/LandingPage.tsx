@@ -133,7 +133,7 @@ export const LandingPage = ({ onGetStarted }: { onGetStarted: () => void }) => {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             <DetailedFeature 
               icon={Shield} 
               title="Identity Scrutiny" 
@@ -232,7 +232,7 @@ export const LandingPage = ({ onGetStarted }: { onGetStarted: () => void }) => {
             </p>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 opacity-40 grayscale transition-all">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 md:gap-12 opacity-40 grayscale transition-all">
              <div className="flex items-center justify-center gap-2 font-black text-sm md:text-xl text-slate-400">🛡️ SECURE.EDU</div>
              <div className="flex items-center justify-center gap-2 font-black text-sm md:text-xl text-slate-400">🎓 CAMPUS.AF</div>
              <div className="flex items-center justify-center gap-2 font-black text-sm md:text-xl text-slate-400">🔥 HACK.ATHON</div>

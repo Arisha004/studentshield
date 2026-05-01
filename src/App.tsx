@@ -875,7 +875,7 @@ export default function App() {
   return (
     <div className="min-h-screen flex bg-bg-deep overflow-x-hidden relative text-slate-900">
       {/* Notifications Portal */}
-      <div className="fixed top-4 right-4 z-[100] pointer-events-none flex flex-col items-end gap-3 max-w-[calc(100%-32px)] md:max-w-md">
+      <div className="fixed top-4 right-4 z-[100] pointer-events-none hidden md:flex flex-col items-end gap-3 max-w-[calc(100%-32px)] md:max-w-md">
         <AnimatePresence>
           {showNotification && notifications.slice(0, 3).map((n, idx) => (
             <motion.div 
