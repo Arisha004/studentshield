@@ -86,16 +86,3 @@ This project is container-ready. To deploy to Google Cloud Run:
      --set-env-vars="GEMINI_API_KEY=your_key"
    ```
 
----
-
-## 🏆 Hackathon: AI-SEEKHO 2026
-**Developed with ♥ by Arisha Mumtaz**
-
----
-
-## 🎨 Design Philosophy
-The UI follows a **"Technical Elegance"** aesthetic—clean, authoritative, and fast. We use a glass-card system with high-contrast typography to ensure critical security information is always readable.
-
----
-
-© 2026 StudentShield AI | Created by Arisha Mumtaz for AI-SEEKHO 2026.
